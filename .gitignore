@@ -1,0 +1,9 @@
+# служебное
+.claude/
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# неиспользуемые картинки (не публикуем)
+img/dress-pink.webp
+img/wreath-red-satin.png

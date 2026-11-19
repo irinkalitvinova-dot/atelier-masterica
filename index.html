@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мастерица – пошив и ремонт одежды</title>
+<meta name="description" content="Пошив одежды по индивидуальным меркам, подгонка и ремонт. Демонстрационный сайт вымышленного ателье.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#1D3A6B; --ink:#2B3F66; --linen:#DFEBF6; --chalk:#F6FAFD;
+  --tape:#F4C430; --pin:#C8362F; --muted:#4A5C7E; --line:#BCCDE0;
+  --tape-w:46px;
+  --serif:'Prata',Georgia,serif; --sans:'Golos Text',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--linen);color:var(--ink);font:400 17px/1.6 var(--sans);padding-left:var(--tape-w);position:relative;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--indigo);outline-offset:3px}
+
+/* ---------- сантиметровая лента ---------- */
+.tape{position:absolute;left:0;top:0;bottom:0;width:var(--tape-w);background-color:var(--tape);z-index:5;
+  background-image:
+    linear-gradient(var(--ink),var(--ink)),
+    linear-gradient(var(--ink),var(--ink)),
+    linear-gradient(var(--ink),var(--ink));
+  background-size:8px 1px,16px 1px,26px 2px;
+  background-position:right 0 top 0,right 0 top 0,right 0 top 0;
+  background-repeat:repeat-y;
+  box-shadow:inset -1px 0 0 rgba(0,0,0,.25),2px 0 8px rgba(18,24,38,.12)}
+.tape{background-image:
+  repeating-linear-gradient(to bottom,var(--ink) 0 1px,transparent 1px 10px),
+  repeating-linear-gradient(to bottom,var(--ink) 0 1px,transparent 1px 50px),
+  repeating-linear-gradient(to bottom,var(--ink) 0 2px,transparent 2px 100px);
+  background-size:9px 100%,17px 100%,27px 100%;
+  background-position:right top,right top,right top;
+  background-repeat:no-repeat}
+.tape b{position:absolute;left:0;width:calc(100% - 30px);text-align:center;font:600 15px/1 var(--sans);color:var(--ink);transform:translateY(-50%);letter-spacing:-.02em}
+
+/* ---------- общее ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+section{padding:clamp(64px,10vw,120px) 0}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--indigo);line-height:1.1}
+h2{font-size:clamp(30px,4.6vw,52px);max-width:16ch}
+h3{font-size:22px}
+p{max-width:62ch}
+.btn{display:inline-block;background:var(--tape);color:var(--ink);font-weight:600;text-decoration:none;padding:16px 28px;border:2px solid var(--ink);border-radius:2px;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.btn.ghost{background:transparent}
+
+/* ---------- шапка ---------- */
+header{padding:20px 0}
+@media (min-width:821px){
+  header{position:sticky;top:0;z-index:10;background:var(--linen);padding:12px 0;box-shadow:0 1px 0 rgba(43,63,102,.14)}
+  section{scroll-margin-top:84px}
+}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+header img{height:60px;display:block}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+nav a{text-decoration:none;white-space:nowrap;font-weight:600;font-size:15px;line-height:1;color:var(--indigo);
+  background:var(--chalk);border:2px solid var(--indigo);border-radius:2px;padding:11px 18px;
+  transition:transform .15s,box-shadow .15s,background-color .15s,color .15s}
+nav a:hover{background:var(--tape);transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--indigo)}
+nav a:active{transform:translate(0,0);box-shadow:none}
+nav a.on{background:var(--indigo);color:var(--tape)}
+nav a.on:hover{background:var(--indigo);color:var(--tape)}
+
+/* ---------- герой ---------- */
+.hero{padding-top:clamp(4px,1.5vw,16px);padding-bottom:clamp(40px,6vw,72px)}
+.hero-photo{margin:24px 0 0}
+.hero-photo img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;object-position:50% 6%;border-radius:2px}
+h1{font-size:clamp(32px,4.4vw,56px);letter-spacing:-.01em}
+.hero p.lead{font-size:20px;margin:26px 0 0;color:var(--muted)}
+@media (max-width:640px){.hero-photo img{aspect-ratio:4/3}}
+.hero .acts{display:flex;gap:14px;flex-wrap:wrap}
+
+.swatches{position:relative;height:clamp(320px,40vw,460px)}
+.sw{position:absolute;width:62%;aspect-ratio:3/4;border:1px solid rgba(18,24,38,.25);box-shadow:0 14px 30px -12px rgba(18,24,38,.45);
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+.sw::after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0 5px,rgba(255,255,255,.18) 5px 6px);mix-blend-mode:overlay}
+.sw{background-size:cover;background-position:center 20%;border:6px solid var(--chalk)}
+.sw::after{display:none}
+.sw.a{left:0;top:4%;transform:rotate(-5deg);background-image:url("img/suit-green.webp")}
+.sw.b{right:0;top:0;transform:rotate(4deg);background-image:url("img/suit-red-tweed.png");background-position:center 20%}
+.sw.c{left:14%;bottom:0;transform:rotate(-1.5deg);background-image:url("img/dress-blue.png");background-position:center 15%}
+.pin{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--pin);box-shadow:inset -3px -3px 0 rgba(0,0,0,.25),2px 3px 4px rgba(0,0,0,.35);z-index:2}
+.tag{position:absolute;right:2%;bottom:6%;z-index:3;background:var(--chalk);border:1.5px solid var(--ink);padding:10px 14px;font-size:14px;line-height:1.35;transform:rotate(3deg);max-width:170px}
+
+/* ---------- услуги ---------- */
+.services{background:var(--chalk)}
+.price-list{margin-top:44px;list-style:none;padding:0;max-width:820px}
+.price-list li{display:flex;align-items:baseline;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
+.price-list li:first-child{border-top:1px solid var(--line)}
+.price-list .n{font-family:var(--serif);font-size:22px;color:var(--indigo)}
+.price-list .d{color:var(--muted);font-size:15px;display:block;margin-top:2px}
+.price-list .dots{flex:1;border-bottom:2px dotted var(--line);transform:translateY(-5px);min-width:20px}
+.price-list .p{font-weight:600;white-space:nowrap}
+.note{margin-top:18px;font-size:14px;color:var(--muted)}
+
+/* ---------- работы ---------- */
+.works{background:var(--chalk)}
+.works .wrap{max-width:none;padding:0}
+.works .head,.fabrics .head{max-width:1080px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+.fabrics .wrap{max-width:none;padding:0}
+.gallery{margin-top:44px;display:flex;gap:14px;overflow-x:auto;padding:0 clamp(20px,4vw,48px);scrollbar-width:none;-ms-overflow-style:none;cursor:grab}
+.gallery::-webkit-scrollbar{display:none}
+.gallery figure{position:relative;overflow:hidden;background:var(--line);margin:0;flex:0 0 clamp(210px,21vw,270px);height:clamp(300px,31vw,400px)}
+.gallery img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
+.gallery figcaption{position:absolute;left:0;bottom:0;background:var(--chalk);color:var(--ink);font-size:14px;font-weight:500;padding:7px 12px;border-top-right-radius:2px}
+.g4 img{object-position:center 30%}.g5 img{object-position:center 15%}.g6 img{object-position:center 30%}
+
+/* ---------- утюг ---------- */
+.iron{margin-top:56px;display:flex;gap:28px;align-items:center;max-width:720px}
+.iron img{width:150px;height:auto;border:1px solid var(--line);flex:none}
+.iron h3{font-size:22px;margin-bottom:6px}
+.iron p{color:var(--muted)}
+
+/* ---------- ткани ---------- */
+.fabrics-grid{margin-top:30px;display:flex;gap:26px;overflow-x:auto;padding:16px clamp(20px,4vw,48px) 12px;scrollbar-width:none;-ms-overflow-style:none;cursor:grab}
+.fabrics-grid::-webkit-scrollbar{display:none}
+.fabrics-grid figure{margin:0;flex:0 0 clamp(120px,12vw,160px)}
+.fabrics-grid img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:50%;box-shadow:0 8px 20px -8px rgba(0,0,0,.45)}
+.fabrics-grid figcaption{margin-top:12px;font-size:14px;color:#dbe6f5;text-align:center;transition:color .25s}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .fabrics-grid img{transition:transform .3s ease,box-shadow .3s ease}
+  .fabrics-grid figure:hover img{transform:translateY(-8px) scale(1.1);box-shadow:0 18px 26px -10px rgba(0,0,0,.55)}
+  .fabrics-grid figure:hover figcaption{color:var(--tape)}
+}
+@media (max-width:640px){.fabrics-grid{gap:18px}.fabrics-grid figure{flex-basis:108px}}
+
+/* ---------- нитки ---------- */
+.threads{margin:48px 0 0}
+.threads img{width:100%;height:clamp(160px,24vw,260px);object-fit:cover;display:block;border:1px solid rgba(255,255,255,.3)}
+.threads figcaption{margin-top:10px;font-size:15px;color:#b9c3d8}
+.threads+.fab-row{margin-top:28px}
+
+/* ---------- цены: бирки ---------- */
+.price-tags{margin-top:44px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.ptag{position:relative;display:flex;flex-direction:column;background:#fff;border:2px solid var(--indigo);border-radius:2px;
+  padding:34px 18px 18px;box-shadow:6px 6px 0 rgba(29,58,107,.14);transition:transform .2s,box-shadow .2s}
+.ptag::before{content:"";position:absolute;left:-2px;right:-2px;top:-2px;height:14px;background-color:var(--tape);
+  background-image:repeating-linear-gradient(90deg,var(--ink) 0 1px,transparent 1px 8px),repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 40px);
+  background-size:100% 5px,100% 9px;background-repeat:no-repeat;border-bottom:2px solid var(--indigo)}
+.ptag::after{content:"";position:absolute;right:14px;top:22px;width:12px;height:12px;border-radius:50%;border:3px solid var(--pin);background:var(--chalk)}
+.ptag h3{font-size:20px;line-height:1.2;padding-right:22px}
+.ptag .d{margin-top:10px;font-size:15px;color:var(--muted);flex:1}
+.ptag .price{margin-top:22px;padding-top:14px;border-top:2px dotted var(--line);font-family:var(--serif);font-size:30px;color:var(--indigo);line-height:1}
+.ptag .price small{font:500 15px var(--sans);color:var(--muted);margin-right:4px}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){.ptag:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 rgba(29,58,107,.2)}}
+.free.promo{margin-top:26px}
+.perks{margin-top:36px;display:flex;flex-wrap:wrap;gap:12px}
+.free{margin:0;display:inline-block;background:var(--tape);color:var(--ink);font-weight:600;border:2px solid var(--indigo);border-radius:2px;padding:11px 16px;font-size:15px;max-width:none}
+.ask{margin-top:28px;background:var(--indigo);color:#dbe6f5;border-radius:2px;padding:26px clamp(20px,3vw,36px);display:flex;gap:18px 40px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ask p{max-width:46ch;font-size:17px;color:#dbe6f5}
+.ask .tel{font-family:var(--serif);font-size:clamp(26px,3.2vw,36px);color:var(--tape);text-decoration:none;white-space:nowrap}
+.ask .tel:hover{text-decoration:underline}
+@media (max-width:980px){.price-tags{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.price-tags{grid-template-columns:1fr}}
+
+/* ---------- ступеньки ---------- */
+h2.long{max-width:30ch;font-size:clamp(26px,3.5vw,42px);line-height:1.2}
+.stairs{list-style:none;padding:0;margin:56px 0 0;display:grid;grid-template-columns:repeat(4,1fr);align-items:end;gap:0}
+.stairs li{display:flex;flex-direction:column}
+.stairs .riser{display:block;position:relative;background:var(--indigo);border-top:6px solid var(--tape);color:#fff}
+.stairs li:nth-child(1) .riser{height:56px}
+.stairs li:nth-child(2) .riser{height:108px}
+.stairs li:nth-child(3) .riser{height:160px}
+.stairs li:nth-child(4) .riser{height:212px;background:var(--indigo)}
+.stairs li:nth-child(4) .riser{border-top-color:var(--pin)}
+.stairs .riser b{position:absolute;left:14px;top:8px;font:400 40px/1 var(--serif);color:#fff}
+.stairs li+li .riser{border-left:1px solid rgba(255,255,255,.25)}
+.stairs .cap{padding:12px 14px;font-weight:600;color:var(--tape);background:var(--indigo);line-height:1.3;min-height:calc(24px + 3em);box-sizing:content-box;border-top:1px solid rgba(255,255,255,.25)}
+.stairs li+li .cap{border-left:1px solid rgba(255,255,255,.25)}.steps{margin-top:36px;display:grid;grid-template-columns:repeat(4,1fr);gap:0 20px}
+.steps > div{border-top:5px solid var(--tape);padding-top:14px}
+.steps h3{font-size:22px;margin-bottom:8px;color:#1B55C8}
+.steps p{font-size:16px;color:var(--ink)}
+@media (max-width:640px){
+  .stairs .riser b{font-size:26px;left:8px}
+  .stairs li:nth-child(1) .riser{height:40px}.stairs li:nth-child(2) .riser{height:76px}.stairs li:nth-child(3) .riser{height:112px}.stairs li:nth-child(4) .riser{height:148px}
+  .stairs .cap{font-size:12px;padding:8px 6px;min-height:calc(16px + 5.2em)}
+  .steps{grid-template-columns:1fr;gap:22px}
+}
+
+/* ---------- как проходит (старое) ---------- */
+
+/* ---------- ткани ---------- */
+.fabrics{background:var(--indigo);color:#dfe5f1}
+.fabrics h2{color:#fff}
+.fabrics p{margin-top:20px;color:#b9c3d8}
+.fab-row{display:flex;gap:18px;margin-top:44px;flex-wrap:wrap}
+.fab{flex:1 1 180px;min-width:150px}
+.fab div{height:150px;border:1px solid rgba(255,255,255,.3)}
+.fab span{display:block;margin-top:10px;font-size:15px}
+.f1{background:repeating-linear-gradient(90deg,#e8e6df 0 13px,#aeb6c6 13px 14px)}
+.f2{background:repeating-linear-gradient(45deg,rgba(255,255,255,.12) 0 2px,transparent 2px 6px),repeating-linear-gradient(-45deg,rgba(0,0,0,.15) 0 2px,transparent 2px 6px),#8b7f6a}
+.f3{background:repeating-linear-gradient(0deg,rgba(200,54,47,.55) 0 3px,transparent 3px 36px),repeating-linear-gradient(90deg,rgba(200,54,47,.55) 0 3px,transparent 3px 36px),#2b3a5c}
+.f4{background-color:#cfc8b6;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .12' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .3  0 0 0 0 .27  0 0 0 0 .2  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---------- запись ---------- */
+.contact .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px)}
+.contact dl{margin-top:22px}
+.contact dt{font-weight:600;margin-top:18px}
+.contact dd{margin-left:0;color:var(--muted)}
+.contact .addr{margin-top:22px;font-size:19px;color:var(--ink)}
+.contact .addr strong{color:var(--indigo)}
+.contact .bigtel{display:inline-block;margin-top:14px;font-family:var(--serif);font-size:clamp(28px,3.6vw,40px);color:var(--indigo);text-decoration:none}
+.contact .bigtel:hover{text-decoration:underline}
+.map{margin:0}
+.map svg{display:block;width:100%;height:auto;border:2px solid var(--indigo);border-radius:2px;box-shadow:6px 6px 0 rgba(29,58,107,.14)}
+.map figcaption{margin-top:10px;font-size:14px;color:var(--muted)}
+.contact big{display:block;font-family:var(--serif);font-size:clamp(28px,4vw,42px);color:var(--indigo);margin:26px 0 22px}
+
+footer{background:var(--indigo);color:#dbe6f5;padding:26px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ---------- мобильные ---------- */
+@media (max-width:820px){
+  :root{--tape-w:38px}
+  .tape b{font-size:12px;width:calc(100% - 26px)}
+  .hero .wrap,.contact .wrap{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr;gap:22px 20px}
+  nav{gap:8px}
+  nav a{font-size:14px;padding:9px 13px}
+  .swatches{height:min(78vw,430px);margin-top:12px}
+  .sw{width:min(46%,260px)}
+  .tag{font-size:12px;max-width:140px;padding:8px 10px}
+}
+@media (max-width:520px){
+  .steps{grid-template-columns:1fr}
+  .iron{flex-direction:column;align-items:flex-start}
+  .gallery{gap:10px}
+  .gallery figure{flex-basis:min(58vw,240px);height:min(84vw,340px)}
+  .gallery figcaption{font-size:12px;line-height:1.25;padding:5px 8px}
+  .price-list li{flex-wrap:wrap}
+  .price-list .dots{display:none}
+}
+/* ---------- венок «Позвони» ---------- */
+.call{position:fixed;right:14px;bottom:14px;width:172px;aspect-ratio:1;z-index:30;display:grid;place-items:center;text-decoration:none;
+  filter:drop-shadow(0 8px 12px rgba(29,58,107,.32))}
+.call img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;animation:wreath-spin 90s linear infinite}
+.call span{position:relative;width:45%;aspect-ratio:1;border-radius:50%;background:var(--tape);color:var(--indigo);
+  border:2px solid var(--indigo);display:grid;place-items:center;font:600 15px/1 var(--sans);transition:transform .2s}
+.call:hover span{transform:scale(1.1)}
+@keyframes wreath-spin{to{transform:rotate(360deg)}}
+@media (max-width:640px){.call{width:128px;right:6px;bottom:6px}.call span{font-size:12px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}.call img{animation:none}.call span{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="tape" id="tape" aria-hidden="true"></div>
+
+<a class="call" href="tel:+70000000000" aria-label="Позвонить в ателье"><img src="img/wreath-cutout.png" alt=""><span>Позвони</span></a>
+
+<header>
+  <div class="wrap">
+    <a href="#top" aria-label="Мастерица – на главную"><img src="brand/logo.svg" alt="Ателье Мастерица"></a>
+    <nav aria-label="Разделы">
+      <a href="#raboty">Модели</a>
+      <a href="#kak">Как работаем</a>
+      <a href="#tkani">Ткани</a>
+      <a href="#uslugi">Услуги</a>
+      <a href="#zapis">Запись</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <h1>Шьём по меркам</h1>
+      <figure class="hero-photo"><img src="img/atelier-table.jpg" alt="Стол закройщика: голубая ткань, бумажные выкройки с красными булавками, сантиметровая лента и ножницы"></figure>
+      <p class="lead">Платья, костюмы, блузы и юбки по вашей фигуре.<br>Подгонка и ремонт одежды. Две примерки.</p>
+    </div>
+  </section>
+
+  <section class="works" id="raboty">
+    <div class="wrap">
+      <div class="head"><h2>Наши модели</h2></div>
+      <div class="gallery">
+        <figure class="g1"><img src="img/set-feather.png" alt="Белый комплект: блуза с отделкой из перьев по низу и юбка-карандаш" loading="lazy"><figcaption>Комплект с отделкой из перьев</figcaption></figure>
+        <figure class="g2"><img src="img/suit-green.webp" alt="Костюм с принтом: жакет с запахом и юбка" loading="lazy"><figcaption>Костюм с принтом</figcaption></figure>
+        <figure class="g3"><img src="img/jacket-python.png" alt="Куртка-косуха с тиснением под змеиную кожу" loading="lazy"><figcaption>Куртка-косуха</figcaption></figure>
+        <figure class="g4"><img src="img/blouse-butterflies.png" alt="Блуза с открытыми плечами и принтом, белая юбка с запахом" loading="lazy"><figcaption>Блуза и юбка с запахом</figcaption></figure>
+        <figure class="g6"><img src="img/blouse-satin.png" alt="Розовая атласная блуза с запахом и чёрная юбка-карандаш" loading="lazy"><figcaption>Атласная блуза и юбка-карандаш</figcaption></figure>
+        <figure class="g5"><img src="img/dress-blue.png" alt="Голубое платье в горошек свободного кроя с асимметричным подолом" loading="lazy"><figcaption>Платье в горошек</figcaption></figure>
+        <figure><img src="img/suit-red-tweed.png" alt="Красный твидовый костюм с чёрной окантовкой и пайетками" loading="lazy"><figcaption>Красный твидовый костюм</figcaption></figure>
+        <figure><img src="img/suit-pink-tweed.png" alt="Розовый твидовый костюм с отделкой жемчужными бусинами" loading="lazy"><figcaption>Розовый костюм с жемчугом</figcaption></figure>
+        <figure><img src="img/dress-bolero-blue.png" alt="Светло-голубое платье-футляр с коротким жакетом-болеро и бантом" loading="lazy"><figcaption>Платье с болеро</figcaption></figure>
+        <figure><img src="img/set-blue-bow.png" alt="Голубой комплект: асимметричная блуза с бантом и юбка" loading="lazy"><figcaption>Голубой комплект с бантом</figcaption></figure>
+        <figure><img src="img/set-red-lace.webp" alt="Красный кружевной комплект: жакет и юбка" loading="lazy"><figcaption>Кружевной комплект</figcaption></figure>
+        <figure><img src="img/dress-royal-pleated.png" alt="Синее платье с драпировкой и плиссированной юбкой" loading="lazy"><figcaption>Платье с драпировкой</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="kak">
+    <div class="wrap">
+      <h2 class="long">Для выполнения Заказа качественно и в срок наши профессионалы работают по этапам.</h2>
+      <ol class="stairs" aria-label="Этапы работы">
+        <li><span class="riser"><b>1</b></span><span class="cap">Снимаем мерки</span></li>
+        <li><span class="riser"><b>2</b></span><span class="cap">Выбираем ткань и делаем выкройки</span></li>
+        <li><span class="riser"><b>3</b></span><span class="cap">Делаем две примерки</span></li>
+        <li><span class="riser"><b>4</b></span><span class="cap">Выдаём готовое изделие</span></li>
+      </ol>
+      <div class="steps">
+        <div><h3>Мерки</h3><p>Для каждой модели снимаем от 12 до 30 мерок.</p></div>
+        <div><h3>Фасон, ткань и выкройка</h3><p>В зависимости от типа фигуры выбираем фасон, подбираем ткань и строим индивидуальную выкройку.</p></div>
+        <div><h3>Примерки</h3><p>Примерка нужна для корректировки длины, горловины и посадки изделия. Первая – для мастера, вторая – для заказчика и ответов на вопросы по выполненной работе, если они есть.</p></div>
+        <div><h3>Выдача</h3><p>Без сюрпризов в день выдачи: отпариваем, упаковываем и отдаём готовое изделие.</p></div>
+      </div>
+      <div class="iron">
+        <img src="img/steam-iron.png" alt="Паровой утюг на гладильном столе в мастерской" loading="lazy">
+        <div>
+          <h3>Перед выдачей отпариваем каждую вещь</h3>
+          <p>Паровой утюг разглаживает швы и снимает следы примерок, поэтому вы забираете вещь, которую можно сразу надеть.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="fabrics" id="tkani">
+    <div class="wrap">
+      <div class="head">
+        <h2>Ткани на любой вкус</h2>
+        <p>Мы предлагаем широкий выбор тканей. Работаем и с тканями Заказчика. Квалифицированный мастер-закройщик консультирует Клиентов бесплатно.</p>
+      </div>
+      <div class="fabrics-grid">
+        <figure><img src="img/fabric-velvet.png" alt="Бордовый бархат складками" loading="lazy"><figcaption>Бархат</figcaption></figure>
+        <figure><img src="img/fabric-linen.png" alt="Стопка льняных тканей разных цветов" loading="lazy"><figcaption>Лён и рогожка</figcaption></figure>
+        <figure><img src="img/fabric-brocade.png" alt="Яркая парча с цветочным узором" loading="lazy"><figcaption>Парча</figcaption></figure>
+        <figure><img src="img/fabric-jacquard.png" alt="Жаккард с цветочным рисунком, белый, сиреневый и бежевый" loading="lazy"><figcaption>Жаккард</figcaption></figure>
+        <figure><img src="img/fabric-embroidered-mesh.png" alt="Тонкая сетка с вышивкой, чёрная, серо-голубая и молочная" loading="lazy"><figcaption>Сетка с вышивкой</figcaption></figure>
+        <figure><img src="img/fabric-satin-teal.png" alt="Бирюзовый атлас, закрученный спиралью" loading="lazy"><figcaption>Атлас</figcaption></figure>
+        <figure><img src="img/fabric-cotton-pastel.png" alt="Стопка хлопковых тканей в клетку, цветочек и горошек" loading="lazy"><figcaption>Хлопок в клетку и горошек</figcaption></figure>
+        <figure><img src="img/fabric-satin-bright.png" alt="Атлас разных цветов, сложенный веером" loading="lazy"><figcaption>Атлас в цвете</figcaption></figure>
+        <figure><img src="img/fabric-velvet-red.png" alt="Рулон красного бархата" loading="lazy"><figcaption>Красный бархат</figcaption></figure>
+        <figure><img src="img/fabric-cotton-floral.png" alt="Стопка розового хлопка: клетка, цветы, сердечки и горошек" loading="lazy"><figcaption>Хлопок в цветочек</figcaption></figure>
+        <figure><img src="img/fabric-linen-purple.png" alt="Сиреневая льняная ткань" loading="lazy"><figcaption>Лён сиреневый</figcaption></figure>
+        <figure><img src="img/fabric-canvas-green.png" alt="Плотная серо-зелёная ткань складками" loading="lazy"><figcaption>Плотный хлопок</figcaption></figure>
+      </div>
+      <div class="head"><figure class="threads"><img src="img/thread-wall.webp" alt="Стена с катушками ниток всех оттенков" loading="lazy"><figcaption>Нитки подбираем под ткань</figcaption></figure></div>
+    </div>
+  </section>
+
+  <section class="services" id="uslugi">
+    <div class="wrap">
+      <h2>Услуги и цены</h2>
+      <div class="price-tags">
+        <article class="ptag">
+          <h3>Подгонка брюк и юбок</h3>
+          <p class="d">Длина, талия, посадка. Готово за 2–3 дня</p>
+          <p class="price"><small>от</small> 800 ₽</p>
+        </article>
+        <article class="ptag">
+          <h3>Ремонт: молнии, подкладка, швы</h3>
+          <p class="d">Платья, юбки, брюки и вещи из плотных тканей</p>
+          <p class="price"><small>от</small> 1 200 ₽</p>
+        </article>
+        <article class="ptag">
+          <h3>Платье по меркам</h3>
+          <p class="d">Повседневное и вечернее, ткань на выбор</p>
+          <p class="price"><small>от</small> 14 000 ₽</p>
+        </article>
+        <article class="ptag">
+          <h3>Костюм по меркам</h3>
+          <p class="d">Пиджак и брюки или юбка, две примерки</p>
+          <p class="price"><small>от</small> 38 000 ₽</p>
+        </article>
+      </div>
+      <div class="perks">
+        <p class="free">Мелкие работы для наших Клиентов выполняем бесплатно.</p>
+      </div>
+      <div class="ask">
+        <p>С полным перечнем услуг и расценок можно ознакомиться в ателье. На конкретные вопросы по заказу отвечаем по телефону.</p>
+        <a class="tel" href="tel:+70000000000">+7 (000) 000-00-00</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="zapis">
+    <div class="wrap">
+      <div>
+        <h2>Приходите к нам</h2>
+        <p class="addr">Ателье находится по адресу: <strong>ул. Портновская, 7</strong>, вход со двора.</p>
+        <dl>
+          <dt>Часы работы</dt><dd>Вт–Сб, 10:00–19:00. Воскресенье и понедельник – выходные</dd>
+          <dt>Сколько длится первая встреча</dt><dd>Около часа: мерки, выбор ткани, расчёт стоимости</dd>
+        </dl>
+        <p class="free promo">Для постоянных клиентов есть акции и скидки.</p>
+      </div>
+      <figure class="map">
+        <svg viewBox="0 0 600 460" role="img" aria-label="Схема проезда к ателье Мастерица на улице Портновской, 7">
+          <rect width="600" height="460" fill="#E9F1F9"/>
+          <!-- кварталы -->
+          <g fill="#D2E2F1">
+            <rect x="18" y="18" width="150" height="120" rx="6"/><rect x="190" y="18" width="130" height="120" rx="6"/>
+            <rect x="342" y="18" width="110" height="120" rx="6"/><rect x="474" y="18" width="108" height="120" rx="6"/>
+            <rect x="18" y="178" width="150" height="100" rx="6"/><rect x="190" y="178" width="130" height="100" rx="6"/>
+            <rect x="342" y="178" width="110" height="100" rx="6"/><rect x="474" y="178" width="108" height="100" rx="6"/>
+            <rect x="18" y="318" width="150" height="124" rx="6"/><rect x="190" y="318" width="130" height="124" rx="6"/>
+            <rect x="342" y="318" width="110" height="124" rx="6"/><rect x="474" y="318" width="108" height="124" rx="6"/>
+          </g>
+          <!-- парк -->
+          <rect x="342" y="318" width="110" height="124" rx="6" fill="#CFE6DA"/>
+          <g fill="#A9D2BC"><circle cx="372" cy="350" r="9"/><circle cx="410" cy="378" r="11"/><circle cx="384" cy="408" r="8"/><circle cx="426" cy="344" r="7"/></g>
+          <!-- улицы -->
+          <g stroke="#fff" stroke-width="14" stroke-linecap="butt">
+            <line x1="0" y1="158" x2="600" y2="158"/><line x1="0" y1="298" x2="600" y2="298"/>
+            <line x1="180" y1="0" x2="180" y2="460"/><line x1="331" y1="0" x2="331" y2="460"/><line x1="463" y1="0" x2="463" y2="460"/>
+          </g>
+          <!-- главная улица: лента -->
+          <rect x="0" y="152" width="600" height="12" fill="#F4C430"/>
+          <g stroke="#2B3F66" stroke-width="1.2">
+            <path d="M0 152v5M10 152v8M20 152v5M30 152v5M40 152v5M50 152v5M60 152v8M70 152v5M80 152v5M90 152v5M100 152v5M110 152v8M120 152v5M130 152v5M140 152v5M150 152v5M160 152v8M170 152v5M180 152v5M190 152v5M200 152v5M210 152v8M220 152v5M230 152v5M240 152v5M250 152v5M260 152v8M270 152v5M280 152v5M290 152v5M300 152v5M310 152v8M320 152v5M330 152v5M340 152v5M350 152v5M360 152v8M370 152v5M380 152v5M390 152v5M400 152v5M410 152v8M420 152v5M430 152v5M440 152v5M450 152v5M460 152v8M470 152v5M480 152v5M490 152v5M500 152v5M510 152v8M520 152v5M530 152v5M540 152v5M550 152v5M560 152v8M570 152v5M580 152v5M590 152v5"/>
+          </g>
+          <text x="22" y="148" font-family="Golos Text, Arial, sans-serif" font-size="12" font-weight="600" fill="#2B3F66">ул. Портновская</text>
+          <!-- вход со двора -->
+          <path d="M255 164v38" stroke="#2B3F66" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+          <!-- булавка -->
+          <g transform="translate(255 118)">
+            <path d="M0 0c-18 0-30 13-30 28 0 20 30 44 30 44s30-24 30-44c0-15-12-28-30-28z" fill="#C8362F" stroke="#2B3F66" stroke-width="2.5" transform="translate(0 -28) scale(.75)"/>
+            <circle cx="0" cy="-7" r="7" fill="#fff"/>
+          </g>
+          <g transform="translate(255 104)"><rect x="-58" y="-62" width="116" height="22" rx="2" fill="#2B3F66"/>
+            <text x="0" y="-46" text-anchor="middle" font-family="Golos Text, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#F4C430">Мастерица, 7</text></g>
+        </svg>
+        <figcaption>Схема проезда. Вход со двора</figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Демонстрационный сайт. Адрес, телефон и цены условные</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tape=document.getElementById('tape');
+  // 1 см = 10 px; цифра каждые 10 см
+  function build(){
+    tape.innerHTML='';
+    var h=document.body.scrollHeight;
+    for(var y=100;y<h;y+=100){
+      var b=document.createElement('b');b.style.top=y+'px';b.textContent=y/10;tape.appendChild(b);
+    }
+  }
+  build();
+  window.addEventListener('resize',build);
+  window.addEventListener('load',build);
+
+  // Лента-вешалка: модели медленно едут по кругу. Мышь, палец и фокус останавливают её.
+  var still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function ribbon(g,speed,dir){
+  if(g && !still){
+    var orig=[].slice.call(g.children);
+    orig.forEach(function(f){var c=f.cloneNode(true);c.setAttribute('aria-hidden','true');c.querySelectorAll('img').forEach(function(i){i.alt='';i.loading='eager'});g.appendChild(c)});
+    var pos=0,last=0,paused=false,resumeAt=0;
+    function loopW(){return g.children[orig.length].offsetLeft-g.children[0].offsetLeft}
+    function hold(ms){paused=true;resumeAt=ms?performance.now()+ms:0}
+    g.addEventListener('mouseenter',function(){hold(0)});
+    g.addEventListener('mouseleave',function(){pos=g.scrollLeft;paused=false});
+    g.addEventListener('focusin',function(){hold(0)});
+    g.addEventListener('focusout',function(){pos=g.scrollLeft;paused=false});
+    ['touchstart','pointerdown','wheel'].forEach(function(e){g.addEventListener(e,function(){hold(2500)},{passive:true})});
+    // перетаскивание мышью
+    var down=false,sx=0,sl=0;
+    g.addEventListener('mousedown',function(e){down=true;sx=e.pageX;sl=g.scrollLeft;g.style.cursor='grabbing'});
+    window.addEventListener('mouseup',function(){down=false;g.style.cursor='grab'});
+    window.addEventListener('mousemove',function(e){if(down){g.scrollLeft=sl-(e.pageX-sx)}});
+    g.addEventListener('dragstart',function(e){e.preventDefault()});
+    function tick(t){
+      var dt=Math.min(t-last,64);last=t;
+      if(paused && resumeAt && t>=resumeAt){paused=false;resumeAt=0;pos=g.scrollLeft}
+      var w=loopW();
+      if(!paused && w>0){pos+=dir*speed*dt/1000;if(pos>=w)pos-=w;if(pos<0)pos+=w;g.scrollLeft=pos}
+      else if(w>0){if(g.scrollLeft>=w)g.scrollLeft-=w;else if(g.scrollLeft<=0)g.scrollLeft+=w}
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  }
+  // Подсветка пункта меню для раздела, который сейчас на экране
+  var links=[].slice.call(document.querySelectorAll('nav a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  var queued=false;
+  function mark(){
+    queued=false;
+    var mid=window.innerHeight*0.4,cur=-1;
+    secs.forEach(function(s,i){if(s){var r=s.getBoundingClientRect();if(r.top<=mid&&r.bottom>mid)cur=i}});
+    links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
+  }
+  function queue(){if(!queued){queued=true;requestAnimationFrame(mark)}}
+  window.addEventListener('scroll',queue,{passive:true});
+  window.addEventListener('resize',queue);
+  mark();
+  ribbon(document.querySelector('.gallery'),32,1);
+  ribbon(document.querySelector('.fabrics-grid'),22,-1);
+})();
+</script>
+</body>
+</html>
