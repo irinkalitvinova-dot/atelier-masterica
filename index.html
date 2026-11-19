@@ -462,13 +462,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   if(g && !still){
     var orig=[].slice.call(g.children);
     orig.forEach(function(f){var c=f.cloneNode(true);c.setAttribute('aria-hidden','true');c.querySelectorAll('img').forEach(function(i){i.alt='';i.loading='eager'});g.appendChild(c)});
-    var pos=0,last=0,paused=false,resumeAt=0;
+    var pos=0,last=0,resumeAt=0,wasHeld=false;
+    var canHover=window.matchMedia('(hover:hover)').matches;
     function loopW(){return g.children[orig.length].offsetLeft-g.children[0].offsetLeft}
-    function hold(ms){paused=true;resumeAt=ms?performance.now()+ms:0}
-    g.addEventListener('mouseenter',function(){hold(0)});
-    g.addEventListener('mouseleave',function(){pos=g.scrollLeft;paused=false});
-    g.addEventListener('focusin',function(){hold(0)});
-    g.addEventListener('focusout',function(){pos=g.scrollLeft;paused=false});
+    function hold(ms){resumeAt=performance.now()+ms}
+    // пауза: мышь над лентой (только там, где мышь есть), фокус внутри или недавнее касание/колесо
+    function isHeld(t){return (canHover&&g.matches(':hover'))||g.matches(':focus-within')||t<resumeAt}
     ['touchstart','pointerdown','wheel'].forEach(function(e){g.addEventListener(e,function(){hold(2500)},{passive:true})});
     // перетаскивание мышью
     var down=false,sx=0,sl=0;
@@ -478,9 +477,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     g.addEventListener('dragstart',function(e){e.preventDefault()});
     function tick(t){
       var dt=Math.min(t-last,64);last=t;
-      if(paused && resumeAt && t>=resumeAt){paused=false;resumeAt=0;pos=g.scrollLeft}
+      var held=isHeld(t);
+      if(wasHeld&&!held){pos=g.scrollLeft}
+      wasHeld=held;
       var w=loopW();
-      if(!paused && w>0){pos+=dir*speed*dt/1000;if(pos>=w)pos-=w;if(pos<0)pos+=w;g.scrollLeft=pos}
+      if(!held && w>0){pos+=dir*speed*dt/1000;if(pos>=w)pos-=w;if(pos<0)pos+=w;g.scrollLeft=pos}
       else if(w>0){if(g.scrollLeft>=w)g.scrollLeft-=w;else if(g.scrollLeft<=0)g.scrollLeft+=w}
       requestAnimationFrame(tick);
     }
